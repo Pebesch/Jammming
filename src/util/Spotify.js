@@ -9,20 +9,18 @@ const Spotify = {
   getAccessToken() {
     if(accessToken) {
       return accessToken;
+    }
+    let tokenMatch = window.location.href.match(/access_token=([^&]*)/);
+    let expireMatch = window.location.href.match(/expires_in=([^&]*)/);
+    if (tokenMatch && expireMatch) {
+      accessToken = tokenMatch[1];
+      expiresIn = parseInt(expireMatch[1], 10);
+      window.setTimeout(() => accessToken = '', expiresIn * 1000);
+      window.history.pushState('Access Token', null, '/');
+      return accessToken;
     } else {
-      let tokenMatch = window.location.href.match(/access_token=([^&]*)/);
-      let expireMatch = window.location.href.match(/expires_in=([^&]*)/);
-      if (tokenMatch && expireMatch) {
-        accessToken = tokenMatch[1];
-        expiresIn = parseInt(expireMatch[1], 10);
-        window.setTimeout(() => accessToken = '', expiresIn * 1000);
-        window.history.pushState('Access Token', null, '/');
-        return accessToken;
-      } else {
-        let fallbackURL = `${accessBase}?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURI}`;
-        console.log(fallbackURL);
-        window.location = fallbackURL;
-      }
+      const fallbackURL =`${accessBase}?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURI}`;
+      window.location = fallbackURL;
     }
   },
 
