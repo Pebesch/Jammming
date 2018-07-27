@@ -51,6 +51,9 @@ class App extends Component {
     super(props);
     this.state = { searchResults: tracks, playlistName: 'My super awsome playlist!', playlistTracks: tracksChill };
     this.addTrack = this.addTrack.bind(this);
+    this.removeTrack = this.removeTrack.bind(this);
+    this.updatePlaylistName = this.updatePlaylistName.bind(this);
+    this.savePlayList = this.savePlayList.bind(this);
   }
 
   addTrack(track) {
@@ -63,6 +66,25 @@ class App extends Component {
     this.setState({playlistTracks:newPlaylistTracks});
   }
 
+  removeTrack(track) {
+    if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
+      var newPlaylistTracks = this.state.playlistTracks.slice();
+      newPlaylistTracks.splice(newPlaylistTracks.indexOf(track), 1);
+      this.setState({playlistTracks:newPlaylistTracks});
+    }
+  }
+
+  updatePlaylistName(name) {
+    this.setState({playlistName:name});
+  }
+
+  savePlayList() {
+    var URIArr = [];
+    this.state.playlistTracks.forEach(track =>  {
+      URIArr.push(`spotify:track:${track.id}`);
+    });
+  }
+
   render() {
     return (
       <div>
@@ -70,8 +92,8 @@ class App extends Component {
         <div className="App">
           <SearchBar />
           <div className="App-playlist">
-            <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack}/>
-            <PlayList playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} />
+            <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack} />
+            <PlayList playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlayList} />
           </div>
         </div>
       </div>
