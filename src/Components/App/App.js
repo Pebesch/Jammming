@@ -25,10 +25,42 @@ let tracks = [
   }
 ];
 
+let tracksChill = [
+  {
+    name: 'Three Little Birds',
+    artist: 'Bob Marley',
+    album: 'Birdy',
+    id: 4
+  },
+  {
+    name: 'Buffalo Soldier',
+    artist: 'Bob Marley',
+    album: 'Pew pew',
+    id: 5
+  },
+  {
+    name: 'No Woman No Cry',
+    artist: 'Bob Marley',
+    album: 'Cry clean',
+    id: 6
+  }
+]
+
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { searchResults: tracks };
+    this.state = { searchResults: tracks, playlistName: 'My super awsome playlist!', playlistTracks: tracksChill };
+    this.addTrack = this.addTrack.bind(this);
+  }
+
+  addTrack(track) {
+    if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
+      console.log('Already added');
+      return;
+    }
+    var newPlaylistTracks = this.state.playlistTracks.slice();
+    newPlaylistTracks.push(track);
+    this.setState({playlistTracks:newPlaylistTracks});
   }
 
   render() {
@@ -38,8 +70,8 @@ class App extends Component {
         <div className="App">
           <SearchBar />
           <div className="App-playlist">
-            <SearchResults searchResults={this.state.searchResults} />
-            <PlayList />
+            <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack}/>
+            <PlayList playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} />
           </div>
         </div>
       </div>
