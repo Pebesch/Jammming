@@ -39,10 +39,11 @@ class App extends Component {
   }
 
   savePlayList() {
-    var URIArr = [];
+    var URIArr;
     this.state.playlistTracks.forEach(track =>  {
       URIArr.push(`spotify:track:${track.id}`);
     });
+    Spotify.savePlayList(this.state.playlistName, URIArr);
   }
 
   search(term) {
