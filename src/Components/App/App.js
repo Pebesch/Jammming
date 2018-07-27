@@ -5,52 +5,10 @@ import SearchResults from '../SearchResults/SearchResults';
 import PlayList from '../PlayList/PlayList';
 import Spotify from '../../util/Spotify';
 
-let tracks = [
-  {
-    name: 'Tiny Dancer',
-    artist: 'Elton John',
-    album: 'Madam Across The Water',
-    id: 1
-  },
-  {
-    name: 'Penny Lane',
-    artist: 'The Beatles',
-    album: 'Penny Lane',
-    id: 2
-  },
-  {
-    name: 'Bohemiam Rapsody',
-    artist: 'Queen',
-    album: 'The Platinum Collection',
-    id: 3
-  }
-];
-
-let tracksChill = [
-  {
-    name: 'Three Little Birds',
-    artist: 'Bob Marley',
-    album: 'Birdy',
-    id: 4
-  },
-  {
-    name: 'Buffalo Soldier',
-    artist: 'Bob Marley',
-    album: 'Pew pew',
-    id: 5
-  },
-  {
-    name: 'No Woman No Cry',
-    artist: 'Bob Marley',
-    album: 'Cry clean',
-    id: 6
-  }
-]
-
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { searchResults: tracks, playlistName: 'My super awsome playlist!', playlistTracks: tracksChill };
+    this.state = { searchResults: [], playlistName: '', playlistTracks: [] };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
