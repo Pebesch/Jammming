@@ -3,6 +3,7 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import PlayList from '../PlayList/PlayList';
+import Spotify from '../../util/Spotify';
 
 let tracks = [
   {
@@ -87,7 +88,9 @@ class App extends Component {
   }
 
   search(term) {
-    console.log(term);
+    let searchResults = Spotify.search(term);
+    console.log(searchResults);
+    this.setState({searchResults: searchResults});
   }
 
   render() {
