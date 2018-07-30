@@ -39,9 +39,9 @@ class App extends Component {
   }
 
   savePlayList() {
-    var URIArr;
-    this.state.playlistTracks.forEach(track =>  {
-      URIArr.push(`spotify:track:${track.id}`);
+    const URIArr = [];
+    this.state.playlistTracks.forEach(track => {
+      URIArr.push(`${track.uri}`);
     });
     Spotify.savePlayList(this.state.playlistName, URIArr);
   }
