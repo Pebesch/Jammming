@@ -1,5 +1,6 @@
 let accessToken;
-const redirectURI = 'http://localhost:3000/';
+//const redirectURI = 'http://localhost:3000/';
+const redirectURI = 'http://www.jammming.pebs.surge.sh';
 const clientID = '03ab43f6ef994bd9983d285284a7be44';
 const searchBase = 'https://api.spotify.com/v1/';
 const accessBase = 'https://accounts.spotify.com/authorize';
