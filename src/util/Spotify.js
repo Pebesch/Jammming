@@ -1,6 +1,5 @@
 let accessToken;
-//const redirectURI = 'http://localhost:3000/';
-const redirectURI = 'http://www.jammming.pebs.surge.sh';
+const redirectURI = 'http://localhost:3000/';
 const clientID = '03ab43f6ef994bd9983d285284a7be44';
 const searchBase = 'https://api.spotify.com/v1/';
 const accessBase = 'https://accounts.spotify.com/authorize';
@@ -55,7 +54,9 @@ const Spotify = {
         name: track.name,
         artist: track.artists[0].name,
         album: track.album.name,
-        uri: track.uri
+        uri: track.uri,
+        image: track.album.images[2].url,
+        preview_url: track.preview_url
       }));
     });
   },

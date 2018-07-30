@@ -32,3 +32,29 @@
   font-weight: 300;
   color: rgba(256, 256, 256, 0.8);
 }
+
+.Track-information img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+.img-container, .preview-container {
+  position: relative;
+  height: 3rem;
+  width: auto;
+  margin-right: 1rem;
+}
+
+.preview-container {
+  display: flex;
+  align-items: center;
+  width: 1rem;
+}
+
+.vertical-flex{
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
