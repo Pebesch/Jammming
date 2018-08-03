@@ -3,6 +3,7 @@ const redirectURI = 'http://localhost:3000/';
 const clientID = '03ab43f6ef994bd9983d285284a7be44';
 const searchBase = 'https://api.spotify.com/v1/';
 const accessBase = 'https://accounts.spotify.com/authorize';
+let userId;
 
 
 const Spotify = {
@@ -28,16 +29,21 @@ const Spotify = {
     }
   },
 
+  // Returns a header object
+  getAuthorizationHeader() {
+    const authheader = {
+      Authorization: `Bearer ${this.getAccessToken()}`,
+    }
+    return authheader;
+  },
+
 /*
 * Param: term => the search term
 * Return: track => mapped track objects
 */
   search(term) {
-    const accessToken = this.getAccessToken();
     return fetch(`${searchBase}search?type=track&q=${term}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
+      headers: this.getAuthorizationHeader()
     }).then(response => {
       return response.json()
     }).then(jsonResponse => {
@@ -57,6 +63,25 @@ const Spotify = {
   },
 
   /*
+  * Returns: jsonResponse.id => The user id uf the current user
+  */
+  getCurrentUserId() {
+    if(userId) {
+      return new Promise(
+        resolve => resolve(userId),
+      );
+    } else {
+      // Get user profile
+      return fetch(`${searchBase}me`, {headers: this.getAuthorizationHeader()}
+      ).then(response => response.json()
+      ).then(jsonResponse => {
+        userId = jsonResponse.id;
+        return jsonResponse.id;
+      })
+    }
+  },
+
+  /*
   * Param: playlistName => Name of the new playlist
   * Param: trackUris => URI's of the track objects
   */
@@ -64,20 +89,10 @@ const Spotify = {
     if (!playlistName || !trackUris.length) {
       return;
     }
-    const accessToken = this.getAccessToken();
-    const headers = {
-      Authorization: `Bearer ${accessToken}`
-    };
-    let userId;
-
-    // Get user profile
-    return fetch(`${searchBase}me`, {headers: headers}
-    ).then(response => response.json()
-    ).then(jsonResponse => {
-      userId = jsonResponse.id;
+    return this.getCurrentUserId().then(() => {
       return fetch(`${searchBase}users/${userId}/playlists`, {
         // Create a new empty playlist on the user account
-        headers: headers,
+        headers: this.getAuthorizationHeader(),
         method: 'POST',
         body: JSON.stringify({name: playlistName})
       }).then(response => response.json()
@@ -85,11 +100,52 @@ const Spotify = {
         // Save tracks to playlist
         const playlistId = jsonResponse.id;
         return fetch(`${searchBase}users/${userId}/playlists/${playlistId}/tracks`, {
-          headers: headers,
+          headers: this.getAuthorizationHeader(),
           method: 'POST',
           body: JSON.stringify({uris: trackUris})
         });
       });
+    });
+  },
+
+  /*
+  * Returns: An array of playlist objects
+  */
+   getUserPlaylists() {
+    return this.getCurrentUserId().then(() => {
+      return fetch(`${searchBase}users/${userId}/playlists`, {headers: this.getAuthorizationHeader()}
+      ).then(response => response.json()
+      ).then(jsonResponse => {
+        if(!jsonResponse.items){
+          return [];
+        }
+        return jsonResponse.items.map(playlist => ({
+          name: playlist.name,
+          id: playlist.id,
+          image: playlist.images[0]
+        }));
+      });
+    });
+  },
+
+  getPlaylist(id) {
+    return this.getCurrentUserId().then(() => {
+      return fetch(`${searchBase}users/${userId}/playlists/${id}/tracks`, {headers: this.getAuthorizationHeader()}
+      ).then(response => response.json()
+      ).then(jsonResponse => {
+        if(!jsonResponse.items){
+          return [];
+        }
+        return jsonResponse.items.map(item => ({
+          id: item.track.id,
+          name: item.track.name,
+          artist: item.track.artists[0].name,
+          album: item.track.album.name,
+          uri: item.track.uri,
+          image: item.track.album.images[2].url,
+          preview_url: item.track.preview_url
+        }));
+      })
     });
   }
 }

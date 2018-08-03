@@ -1,0 +1,30 @@
+.Playlistlist {
+  width: 100%;
+  height: auto;
+  padding: 1.16rem 1.16rem;
+  margin-bottom: 5%;
+  background-color: rgba(1, 12, 63, 0.7);
+  box-shadow: 0 4px 2px 2px #000000;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.items {
+  transition: display 1s;
+}
+
+.controls-action {
+  cursor: pointer;
+  padding: .5rem;
+  font-size: 1.05rem;
+  transition: color .25s;
+}
+
+.controls-action:hover {
+  color: rgba(265, 265, 265, .5);
+}

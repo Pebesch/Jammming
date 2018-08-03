@@ -1,0 +1,22 @@
+.item {
+  display: flex;
+  flex-direction: row;
+  height: 3rem;
+  align-items: center;
+  padding: .5rem 0;
+  border-bottom: 1px solid white;
+  opacity: .6;
+  transition: opacity .5s;
+}
+
+.item:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.item img {
+  display: block;
+  height: 3rem;
+  width: auto;
+  margin-right: 1rem;
+}
