@@ -22,10 +22,10 @@ class PlayListList extends React.Component{
     var show = this.state.isExtended ? 'block' : 'none';
     let style = {display: show};
     return (
-      <div className="Playlistlist">
+      <div className="Playlistlist" onClick={this.toggleDropdown}>
         <div className="controls">
           <p>My Playlists</p>
-          <a className="controls-action" onClick={this.toggleDropdown}>{this.renderAction()}</a>
+          <a className="controls-action">{this.renderAction()}</a>
         </div>
         <div className="items" style={style}>
           {

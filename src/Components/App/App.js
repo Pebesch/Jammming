@@ -50,6 +50,7 @@ class App extends Component {
       URIArr.push(`${track.uri}`);
     });
     Spotify.savePlayList(this.state.playlistName, URIArr);
+    this.clearPlaylist();
   }
 
   // Searches spotify for the given term
@@ -64,6 +65,10 @@ class App extends Component {
       this.setState({playlistTracks: result});
     });
     this.updatePlaylistName(playlist.name);
+  }
+
+  clearPlaylist() {
+      this.setState({playlistName: '', playlistTracks: []});
   }
 
   componentWillMount() {

@@ -128,6 +128,10 @@ const Spotify = {
     });
   },
 
+  /*
+  * Params: id => The playlist id whose songs we want to display
+  * Returns: An array of tracks
+  */
   getPlaylist(id) {
     return this.getCurrentUserId().then(() => {
       return fetch(`${searchBase}users/${userId}/playlists/${id}/tracks`, {headers: this.getAuthorizationHeader()}
