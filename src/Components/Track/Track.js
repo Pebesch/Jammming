@@ -22,6 +22,7 @@ class Track extends React.Component {
     this.props.onRemove(this.props.track);
   }
 
+  // Toggle the music on the audio element for each previable track
   toggleAudio(e) {
     var audio = document.getElementById(`${this.props.track.id}_player`);
     if(!this.state.isPlaying){
@@ -40,6 +41,7 @@ class Track extends React.Component {
         <div className="Track-information vertical-flex">
           <div className="preview-container">
           {
+            // Conditionally renders an audio element
             this.props.track.preview_url !== null &&
             <div onClick={this.toggleAudio}>
               <audio id={`${this.props.track.id}_player`} src={this.props.track.preview_url}> N/A</audio>

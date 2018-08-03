@@ -16,6 +16,7 @@ class App extends Component {
     this.search = this.search.bind(this);
   }
 
+  // Adds a track to current playlist
   addTrack(track) {
     if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
       console.log('Already added');
@@ -26,6 +27,7 @@ class App extends Component {
     this.setState({playlistTracks:newPlaylistTracks});
   }
 
+  // Removes a track from the current playlist
   removeTrack(track) {
     if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
       var newPlaylistTracks = this.state.playlistTracks.slice();
@@ -34,10 +36,12 @@ class App extends Component {
     }
   }
 
+  // Changes the name of the current playlist
   updatePlaylistName(name) {
     this.setState({playlistName:name});
   }
 
+  // Saves the playlist to Spotify
   savePlayList() {
     const URIArr = [];
     this.state.playlistTracks.forEach(track => {
@@ -46,6 +50,7 @@ class App extends Component {
     Spotify.savePlayList(this.state.playlistName, URIArr);
   }
 
+  // Searches spotify for the given term
   search(term) {
     Spotify.search(term).then(tracks => {
       this.setState({searchResults: tracks});

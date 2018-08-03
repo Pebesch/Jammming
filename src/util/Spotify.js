@@ -7,16 +7,11 @@ const accessBase = 'https://accounts.spotify.com/authorize';
 
 const Spotify = {
   getAccessToken() {
+    // If there alreasy is a token return it.
     if (accessToken) {
       return accessToken;
     }
-    // if(localStorage.getItem('spotify_token', '') !== '') {
-    //   var expires = 0 + localStorage.getItem('spotify_expires', '0');
-    // 		if ((new Date()).getTime() > expires) {
-    // 			return '';
-    // 		}
-    //   return localStorage.getItem('spotify_token', '');
-    // }
+    // If not, if the date already is in the URL, fetch it.
     const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
     const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
     if (accessTokenMatch && expiresInMatch) {
@@ -27,16 +22,16 @@ const Spotify = {
       //this.setAccessToken(accessToken, expiresIn);
       return accessToken;
     } else {
+      // If not set and not in the url, get it from spotify.
       const fallbackURL = `${accessBase}?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURI}`;
       window.location = fallbackURL;
     }
   },
 
-  setAccessToken(token, expires) {
-    localStorage.setItem('spotify_token', token);
-    localStorage.setItem('spotify_expires', (new Date()).getTime() + expires);
-  },
-
+/*
+* Param: term => the search term
+* Return: track => mapped track objects
+*/
   search(term) {
     const accessToken = this.getAccessToken();
     return fetch(`${searchBase}search?type=track&q=${term}`, {
@@ -61,6 +56,10 @@ const Spotify = {
     });
   },
 
+  /*
+  * Param: playlistName => Name of the new playlist
+  * Param: trackUris => URI's of the track objects
+  */
   savePlayList(playlistName, trackUris) {
     if (!playlistName || !trackUris.length) {
       return;
@@ -71,16 +70,19 @@ const Spotify = {
     };
     let userId;
 
+    // Get user profile
     return fetch(`${searchBase}me`, {headers: headers}
     ).then(response => response.json()
     ).then(jsonResponse => {
       userId = jsonResponse.id;
       return fetch(`${searchBase}users/${userId}/playlists`, {
+        // Create a new empty playlist on the user account
         headers: headers,
         method: 'POST',
         body: JSON.stringify({name: playlistName})
       }).then(response => response.json()
       ).then(jsonResponse => {
+        // Save tracks to playlist
         const playlistId = jsonResponse.id;
         return fetch(`${searchBase}users/${userId}/playlists/${playlistId}/tracks`, {
           headers: headers,
